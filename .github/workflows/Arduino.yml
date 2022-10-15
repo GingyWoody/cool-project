@@ -1,0 +1,101 @@
+//Ultrasonic sensor setup
+long frontDuration;
+int frontDistance;
+long leftDuration;
+int leftDistance;
+long rightDuration;
+int rightDistance;
+int frontTrig = 9;
+int frontEcho = 8;
+int leftTrig = 3;
+int leftEcho = 2;
+int rightTrig = 5;
+int rightEcho = 4;
+//Servo Setup
+#include <Servo.h>
+Servo LeftServo;
+Servo RightServo;
+
+
+void setup() {
+  LeftServo.attach(12);  
+  RightServo.attach(11);
+  pinMode(frontTrig, OUTPUT);
+  pinMode(frontEcho, INPUT);
+  pinMode(leftTrig, OUTPUT);
+  pinMode(leftEcho, INPUT);
+  pinMode(rightTrig, OUTPUT);
+  pinMode(rightEcho, INPUT);
+  Serial.begin(9600);
+  Serial.println("HC-SR4 testing..");
+  
+  
+}
+
+void loop() {
+  leftPing();
+  delay(1000);
+  rightPing();
+  delay(1000);
+  frontPing();
+  delay(1000);
+  
+  
+}
+
+void foreward() {
+  LeftServo.writeMicroseconds(2000);
+  RightServo.writeMicroseconds(1000);  
+}
+void stopp() {
+  LeftServo.writeMicroseconds(1500);
+  RightServo.writeMicroseconds(1500);
+}
+void backwards() {
+  LeftServo.writeMicroseconds(1000);
+  RightServo.writeMicroseconds(2000);  
+}
+void left(){
+  RightServo.writeMicroseconds(1000);
+  LeftServo.writeMicroseconds(1500);
+}
+void right(){
+  LeftServo.writeMicroseconds(2000);
+  RightServo.writeMicroseconds(1500);
+}
+void frontPing(){
+  digitalWrite(frontTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(frontTrig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(frontTrig, LOW);
+  frontDuration = pulseIn(frontEcho, HIGH);
+  frontDistance = frontDuration * 0.034 / 2;
+  Serial.print("FrontDistance: ");
+  Serial.print(frontDistance);
+  Serial.println(" cm");  
+}
+void rightPing(){
+  digitalWrite(rightTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(rightTrig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(rightTrig, LOW);
+  rightDuration = pulseIn(rightEcho, HIGH);
+  rightDistance = rightDuration * 0.034 / 2;
+  Serial.print("RightDistance: ");
+  Serial.print(rightDistance);
+  Serial.println(" cm");
+}
+void leftPing(){
+  digitalWrite(leftTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(leftTrig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(leftTrig, LOW);
+  leftDuration = pulseIn(leftEcho, HIGH);
+  leftDistance = leftDuration * 0.034 / 2;
+  Serial.print("LeftDistance: ");
+  Serial.print(leftDistance);
+  Serial.println(" cm");
+}
